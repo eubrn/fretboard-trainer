@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="windowPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.eugenbernwald.fretboardtrainer.ui.MainViewController">
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <Label text="Tuning:"/>
+         <ChoiceBox fx:id="tuningChoiceBox" prefWidth="150.0"/>
+      </ToolBar>
+   </top>
+   <center>
+      <AnchorPane prefHeight="438.0" prefWidth="736.0" BorderPane.alignment="CENTER">
+         <Pane fx:id="colorAnimationPane" prefHeight="360.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0"
+               AnchorPane.topAnchor="0.0"/>
+         <Label fx:id="toneLabel" alignment="CENTER" layoutX="283.0" layoutY="43.0" text="Tone Label" textFill="#f8f8f8"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
+            <font>
+               <Font name="Arial" size="55.0"/>
+            </font>
+            <effect>
+               <DropShadow height="27.32" radius="13.0975" width="27.07"/>
+            </effect>
+         </Label>
+         <Label fx:id="stringNumberLabel" alignment="CENTER" layoutX="146.0" layoutY="142.0" text="Tone Label"
+                textFill="#f8f8f8" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.topAnchor="142.0">
+            <font>
+               <Font name="Arial" size="55.0"/>
+            </font>
+            <effect>
+               <DropShadow height="27.32" radius="13.0975" width="27.07"/>
+            </effect>
+         </Label>
+         <Label fx:id="scoreLabel" layoutX="48.0" layoutY="267.0" text="Score: 0" textFill="WHITE"
+                AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
+            <font>
+               <Font size="29.0"/>
+            </font>
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Label>
+      </AnchorPane>
+   </center>
+   <bottom>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <Label text="Device:"/>
+         <ChoiceBox fx:id="deviceChoiceBox" prefWidth="150.0"/>
+         <Label text="Algorithm:"/>
+         <ChoiceBox fx:id="algorithmChoiceBox" prefWidth="150.0"/>
+      </ToolBar>
+   </bottom>
+</BorderPane>
