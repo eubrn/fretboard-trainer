@@ -16,7 +16,6 @@ object Colors {
             Color.rgb(0x3f, 0x88, 0xc5),
             Color.rgb(0x03, 0x2b, 0x43))
 
-    @JvmStatic
     fun getNextColor(current: Color?): Color {
         val colors = BG_COLORS
                 .filter { bg -> current == null || current != bg }
@@ -26,7 +25,6 @@ object Colors {
         return colors[rnd.nextInt(colors.size)]
     }
 
-    @JvmStatic
     fun toBackground(color: Color): Background {
         return Background(BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY))
     }
