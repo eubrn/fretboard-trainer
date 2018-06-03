@@ -9,6 +9,7 @@ import java.util.*
 import java.util.stream.Collectors
 
 class Colors {
+
     companion object {
         private val rnd = Random()
         private val BG_COLORS = Arrays.asList(

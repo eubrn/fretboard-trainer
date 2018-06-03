@@ -140,7 +140,6 @@ class MainViewController : Initializable {
 
     private fun replaceTone() {
 
-
         val tuning = tuningChoiceBox.value
 
         stringIndex = random.nextInt(tuning.numStrings())

@@ -13,15 +13,15 @@ class Tone(private val note: Note, private val shift: Shift, octave: Int) {
     val key: Int
 
     init {
-        this.key = octave * 12 + (note.semitones + shift.value)
+        key = octave * 12 + (note.semitones + shift.value)
 
-        this.frequency = Tone.key2Frequency(this.key)
-        this.lowerLimit = (this.frequency + key2Frequency(this.key - 1)) / 2.0f
-        this.upperLimit = (this.frequency + key2Frequency(this.key + 1)) / 2.0f
+        frequency = Tone.key2Frequency(key)
+        lowerLimit = (frequency + key2Frequency(key - 1)) / 2.0f
+        upperLimit = (frequency + key2Frequency(key + 1)) / 2.0f
     }
 
     override fun toString(): String {
-        return String.format("%s%s", this.note, this.shift.symbol)
+        return String.format("%s%s", note, shift.symbol)
     }
 
     companion object {

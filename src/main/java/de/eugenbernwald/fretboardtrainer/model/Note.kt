@@ -1,7 +1,6 @@
 package de.eugenbernwald.fretboardtrainer.model
 
-enum class Note(semitones: Int) {
-
+enum class Note(val semitones: Int) {
     E(7),
     F(8),
     G(10),
@@ -9,10 +8,4 @@ enum class Note(semitones: Int) {
     B(2),
     C(3),
     D(5);
-
-    val semitones: Int
-
-    init {
-        this.semitones = semitones
-    }
 }

@@ -9,20 +9,20 @@ class GuitarString internal constructor(startTone: Tone) {
 
     init {
 
-        this.tones = ArrayList()
+       tones = ArrayList()
 
         val allNotes = EnumSet.allOf(Note::class.java)
         val allShifts = EnumSet.allOf(Shift::class.java)
         val octave = startTone.key / 12
 
         for (i in 0..11) {
-            this.tones.add(HashSet())
+           tones.add(HashSet())
             for (note in allNotes) {
                 for (shift in allShifts) {
                     for (j in -1..1) {
                         val tone = Tone(note, shift, octave + j)
                         if (Tone.key2Frequency(startTone.key + i) == tone.frequency) {
-                            this.tones[i].add(tone)
+                           tones[i].add(tone)
                         }
                     }
 
@@ -33,7 +33,7 @@ class GuitarString internal constructor(startTone: Tone) {
     }
 
     fun getRandomToneOnFret(num: Int): Tone {
-        val possibleTones = this.tones[num]
-        return ArrayList(possibleTones)[this.random.nextInt(possibleTones.size)]
+        val possibleTones = tones[num]
+        return ArrayList(possibleTones)[random.nextInt(possibleTones.size)]
     }
 }

@@ -17,9 +17,9 @@ class PitchEmitter(private var currentMixerInfo: Mixer.Info?, private val pitchD
     private var currentAlgorithm: PitchProcessor.PitchEstimationAlgorithm
 
     init {
-        this.currentAlgorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
-        this.audioFormat = Constants.AUDIO_FORMAT
-        this.dispatcher = recreateDispatcher()
+        currentAlgorithm = PitchProcessor.PitchEstimationAlgorithm.YIN
+        audioFormat = Constants.AUDIO_FORMAT
+        dispatcher = recreateDispatcher()
     }
 
     private fun recreateDispatcher(): AudioDispatcher {
@@ -34,26 +34,26 @@ class PitchEmitter(private var currentMixerInfo: Mixer.Info?, private val pitchD
             line.start()
             val audioInputStream = AudioInputStream(line)
             val audioStream = JVMAudioInputStream(audioInputStream)
-            this.dispatcher = AudioDispatcher(audioStream, Constants.AUDIO_BUFFER_SIZE, 0)
+            dispatcher = AudioDispatcher(audioStream, Constants.AUDIO_BUFFER_SIZE, 0)
 
         } catch (e: LineUnavailableException) {
             e.printStackTrace()
         }
 
         val processor = PitchProcessor(
-                this.currentAlgorithm,
+                currentAlgorithm,
                 Constants.SAMPLE_RATE,
                 Constants.AUDIO_BUFFER_SIZE,
-                this.pitchDetectionHandler)
+                pitchDetectionHandler)
 
-        this.dispatcher.addAudioProcessor(processor)
+        dispatcher.addAudioProcessor(processor)
 
-        Thread(this.dispatcher).start()
-        return this.dispatcher
+        Thread(dispatcher).start()
+        return dispatcher
     }
 
     fun stop() {
-        this.dispatcher.stop()
+        dispatcher.stop()
     }
 
     fun onDeviceChange(newValue: Mixer.Info) {
