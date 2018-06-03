@@ -14,6 +14,4 @@ enum class Shift(val value: Int) {
                 SHARP -> "♯"
             }
         }
-
-
 }
