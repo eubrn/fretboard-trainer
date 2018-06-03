@@ -28,6 +28,4 @@ class Tone(private val note: Note, private val shift: Shift, octave: Int) {
             return 440.0f * Math.pow(2.0, ((key - 60) / 12.0f).toDouble()).toFloat()
         }
     }
-
-
 }
