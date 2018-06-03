@@ -81,7 +81,6 @@ class MainViewController : Initializable {
         pitchEmitter = PitchEmitter(initialMixerInfo, toneEvaluator)
     }
 
-
     override fun initialize(location: URL?, resources: ResourceBundle?) {
 
         val supportedMixers = AudioSystem.getMixerInfo()
