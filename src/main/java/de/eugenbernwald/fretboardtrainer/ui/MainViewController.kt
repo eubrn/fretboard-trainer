@@ -17,45 +17,43 @@ import javafx.scene.media.MediaPlayer
 import javafx.scene.paint.Color
 import java.net.URL
 import java.util.*
-import java.util.stream.Stream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.DataLine
 import javax.sound.sampled.Mixer.Info
-import kotlin.streams.toList
 
 class MainViewController : Initializable {
 
     private val random: Random = Random()
 
     @FXML
-    private var tuningChoiceBox: ChoiceBox<Tuning>? = null
+    private lateinit var tuningChoiceBox: ChoiceBox<Tuning>
 
     @FXML
-    private var deviceChoiceBox: ChoiceBox<Info>? = null
+    private lateinit var deviceChoiceBox: ChoiceBox<Info>
 
     @FXML
-    private var algorithmChoiceBox: ChoiceBox<PitchEstimationAlgorithm>? = null
+    private lateinit var algorithmChoiceBox: ChoiceBox<PitchEstimationAlgorithm>
 
     @FXML
-    private var toneLabel: Label? = null
+    private lateinit var toneLabel: Label
 
     @FXML
-    private var stringNumberLabel: Label? = null
+    private lateinit var stringNumberLabel: Label
 
     @FXML
-    private var colorAnimationPane: Pane? = null
+    private lateinit var colorAnimationPane: Pane
 
     @FXML
-    private var windowPane: BorderPane? = null
+    private lateinit var windowPane: BorderPane
 
     @FXML
-    private var scoreLabel: Label? = null
+    private lateinit var scoreLabel: Label
 
     private val pitchEmitter: PitchEmitter
 
     private val toneEvaluator: ToneEvaluator
 
-    private var currentColor: Color? = null
+    private var currentColor: Color
 
     private val initialMixerInfo: Info
 
@@ -72,13 +70,13 @@ class MainViewController : Initializable {
         stringIndex = random.nextInt(tuning.numStrings())
         val guitarString = tuning.getString(stringIndex)
         val tone = guitarString.getRandomToneOnFret(random.nextInt(12))
-        toneEvaluator = ToneEvaluator(tone, { replaceTone() })
+        toneEvaluator = ToneEvaluator(tone, { win() })
 
-        initialMixerInfo = Stream.of<Info>(*AudioSystem.getMixerInfo())
+        initialMixerInfo =
+                AudioSystem.getMixerInfo()
                 .map { AudioSystem.getMixer(it) }
                 .filter { m -> m.isLineSupported(DataLine.Info(DataLine::class.java, Constants.AUDIO_FORMAT)) }
-                .map { it.mixerInfo }
-                .findAny().orElse(null)
+                .map { it.mixerInfo }.first()
 
         pitchEmitter = PitchEmitter(initialMixerInfo, toneEvaluator)
     }
@@ -86,7 +84,7 @@ class MainViewController : Initializable {
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
 
-        val supportedMixers = Stream.of<Info>(*AudioSystem.getMixerInfo())
+        val supportedMixers = AudioSystem.getMixerInfo()
                 .map { AudioSystem.getMixer(it) }
                 .filter { m -> m.isLineSupported(DataLine.Info(DataLine::class.java, Constants.AUDIO_FORMAT)) }
                 .map { it.mixerInfo }
@@ -94,29 +92,29 @@ class MainViewController : Initializable {
 
         val infos = FXCollections.observableList<Info>(supportedMixers)
 
-        windowPane?.background = Colors.toBackground(currentColor!!)
-        toneLabel?.text = toneEvaluator.tone.toString()
-        stringNumberLabel?.text = String.format("on String %d", stringIndex + 1)
+        windowPane.background = Colors.toBackground(currentColor)
+        toneLabel.text = toneEvaluator.tone.toString()
+        stringNumberLabel.text = String.format("on String %d", stringIndex + 1)
 
-        colorAnimationPane?.let {
+        colorAnimationPane.let {
             it.background = Colors.toBackground(Colors.getNextColor(currentColor))
             it.prefWidthProperty().bind(toneEvaluator.progress.multiply(800))
         }
 
-        tuningChoiceBox?.let {
+        tuningChoiceBox.let {
             it.items = FXCollections.observableArrayList(*Tuning.values())
             it.value = Tuning.STANDARD_E
             it.selectionModel.selectedItemProperty().addListener({ _, _, _ -> onTuningChanged() })
         }
 
-        deviceChoiceBox?.let {
+        deviceChoiceBox.let {
             it.items = infos
             it.value = initialMixerInfo
             it.converter = MixerInfoStringConverter()
             it.selectionModel.selectedItemProperty().addListener { _, _, newValue -> pitchEmitter.onDeviceChange(newValue) }
         }
 
-        algorithmChoiceBox?.let {
+        algorithmChoiceBox.let {
             it.items = FXCollections.observableList(Arrays.asList(*PitchEstimationAlgorithm.values()))
             it.value = PitchEstimationAlgorithm.YIN
             it.selectionModel.selectedItemProperty().addListener({ _, _, newValue -> pitchEmitter.onAlgorithmChange(newValue) })
@@ -129,29 +127,33 @@ class MainViewController : Initializable {
         replaceTone()
     }
 
+    private fun win(){
+        score++
+        scoreLabel.text = "Score: $score"
+        playSuccessSound()
+        replaceTone()
+    }
+
     fun onClose() {
         pitchEmitter.stop()
     }
 
     private fun replaceTone() {
 
-        playSuccessSound()
-        val tuning = tuningChoiceBox?.value!!
 
-        score++
-        scoreLabel?.text = "Score: $score"
+        val tuning = tuningChoiceBox.value
 
         stringIndex = random.nextInt(tuning.numStrings())
         val guitarString = tuning.getString(stringIndex)
         val newTone = guitarString.getRandomToneOnFret(random.nextInt(12))
         toneEvaluator.tone = newTone
 
-        toneLabel?.text = newTone.toString()
-        stringNumberLabel?.text = "on String ${stringIndex+1}"
+        toneLabel.text = newTone.toString()
+        stringNumberLabel.text = "on String ${stringIndex+1}"
 
-        windowPane?.background = colorAnimationPane?.background
+        windowPane.background = colorAnimationPane.background
         currentColor = Colors.getNextColor(currentColor)
-        colorAnimationPane?.background = Colors.toBackground(currentColor!!)
+        colorAnimationPane.background = Colors.toBackground(currentColor)
     }
 
     private fun playSuccessSound() {
