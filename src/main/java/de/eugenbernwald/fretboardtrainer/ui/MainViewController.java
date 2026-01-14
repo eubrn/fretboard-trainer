@@ -19,6 +19,7 @@ import javafx.stage.WindowEvent;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.Mixer;
+import javax.sound.sampled.TargetDataLine;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -78,7 +79,7 @@ public class MainViewController {
 
         this.initialMixerInfo = Stream.of(AudioSystem.getMixerInfo())
                 .map(AudioSystem::getMixer)
-                .filter(m -> m.isLineSupported(new DataLine.Info(DataLine.class, Constants.AUDIO_FORMAT)))
+                .filter(m -> m.isLineSupported(new DataLine.Info(TargetDataLine.class, Constants.AUDIO_FORMAT)))
                 .map(Mixer::getMixerInfo)
                 .findAny().orElse(null);
 
@@ -91,7 +92,7 @@ public class MainViewController {
 
         List<Mixer.Info> supportedMixers =  Stream.of(AudioSystem.getMixerInfo())
                 .map(AudioSystem::getMixer)
-                .filter(m -> m.isLineSupported(new DataLine.Info(DataLine.class, Constants.AUDIO_FORMAT)))
+                .filter(m -> m.isLineSupported(new DataLine.Info(TargetDataLine.class, Constants.AUDIO_FORMAT)))
                 .map(Mixer::getMixerInfo)
                 .collect(Collectors.toList());
 
