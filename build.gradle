@@ -1,20 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
 group 'de.eugenbernwald'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+javafx {
+    version = "25"
+    modules = [
+            'javafx.controls',
+            'javafx.fxml',
+            'javafx.media'
+    ]
+}
 
-sourceCompatibility = 1.9
+application {
+    mainClass = 'de.eugenbernwald.fretboardtrainer.FretboardTrainerApp'
+    applicationDefaultJvmArgs = [
+            '--enable-native-access', 'javafx.graphics'
+    ]
+}
 
 repositories {
     mavenCentral()
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
+    maven {
+        url = "https://mvn.0110.be/releases"
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'be.tarsos.dsp:core:2.5'
+    implementation 'be.tarsos.dsp:jvm:2.5'
 }
